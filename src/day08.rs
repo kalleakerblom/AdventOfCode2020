@@ -87,7 +87,7 @@ mod tests {
     }
     #[test]
     fn part2() {
-        let input = fs::read_to_string("input/day08_fix").unwrap();
+        let input = fs::read_to_string("input/day08").unwrap();
         let cpu = CPU::new(&input);
         'outer: for i in 0..cpu.instructions.len() {
             if let Op::Acc(_) = cpu.instructions[i] {
