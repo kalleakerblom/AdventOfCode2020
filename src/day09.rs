@@ -40,11 +40,32 @@ fn xmas2(input: &str, goal: usize) -> (usize, usize) {
     }
     panic!()
 }
+fn xmas2_v2(input: &str, goal: usize) -> (usize, usize) {
+    let nums: Vec<usize> = input.lines().map(|l| l.parse().unwrap()).collect();
+    let mut sum = 0;
+    let mut start = 0;
+    let mut end = 0;
+    while end < nums.len() - 1 {
+        while sum > goal {
+            sum -= nums[start];
+            start += 1;
+        }
+        if sum == goal {
+            let slice = &nums[start..end];
+            let min = slice.iter().min().unwrap();
+            let max = slice.iter().max().unwrap();
+            return (*min, *max);
+        }
+        sum += nums[end];
+        end += 1;
+    }
+    panic!()
+}
 #[cfg(test)]
 mod tests {
     use std::fs;
 
-    use super::{xmas, xmas2};
+    use super::{xmas, xmas2, xmas2_v2};
     #[test]
     fn example() {
         let input = fs::read_to_string("input/example09").unwrap();
@@ -63,6 +84,13 @@ mod tests {
     fn part2() {
         let input = fs::read_to_string("input/day09").unwrap();
         let ans = xmas2(&input, 1504371145);
+        assert_eq!(ans.0 + ans.1, 183278487);
+    }
+
+    #[test]
+    fn part2_v2() {
+        let input = fs::read_to_string("input/day09").unwrap();
+        let ans = xmas2_v2(&input, 1504371145);
         assert_eq!(ans.0 + ans.1, 183278487);
     }
 }
