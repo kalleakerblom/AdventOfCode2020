@@ -52,7 +52,7 @@ fn check_rule<'a>(
             subrules.iter().fold(iter::once(s).collect(), |acc, sub_id| {
                 acc.iter()
                     .map(|s| check_rule(s, &rule_map[&sub_id], rule_map))
-                    .fold_first(|sets, set| &sets | &set)
+                    .reduce(|sets, set| &sets | &set)
                     .unwrap_or_else(HashSet::new)
             })
         }
@@ -62,7 +62,7 @@ fn check_rule<'a>(
                 |acc, sub_id| {
                     acc.iter()
                         .map(|s| check_rule(s, &rule_map[&sub_id], rule_map))
-                        .fold_first(|sets, set| &sets | &set)
+                        .reduce(|sets, set| &sets | &set)
                         .unwrap_or_else(HashSet::new)
                 },
             );
@@ -71,7 +71,7 @@ fn check_rule<'a>(
                 |acc, sub_id| {
                     acc.iter()
                         .map(|s| check_rule(s, &rule_map[&sub_id], rule_map))
-                        .fold_first(|sets, set| &sets | &set)
+                        .reduce(|sets, set| &sets | &set)
                         .unwrap_or_else(HashSet::new)
                 },
             );

@@ -1,5 +1,3 @@
-#![feature(str_split_once)]
-#![feature(iterator_fold_self)]
 #![allow(dead_code)]
 mod day01;
 mod day02;

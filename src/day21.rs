@@ -43,7 +43,7 @@ fn find_allergy_solve(
                 .iter()
                 .map(|i| &foods[*i].ingredients)
                 .cloned()
-                .fold_first(|acc, i| &acc & &i)
+                .reduce(|acc, i| &acc & &i)
                 .unwrap();
             let shared_ingredients = &shared_ingredients - &solved;
             if shared_ingredients.len() == 1 {
