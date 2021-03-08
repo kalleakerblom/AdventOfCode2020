@@ -6,13 +6,13 @@ enum Op {
 }
 
 #[derive(Clone)]
-struct CPU {
+struct Cpu {
     instructions: Vec<Op>,
     head: usize,
     acc: i32,
 }
 
-impl CPU {
+impl Cpu {
     fn new(input: &str) -> Self {
         let instructions = input
             .lines()
@@ -52,11 +52,11 @@ impl CPU {
 mod tests {
     use std::{collections::HashSet, fs};
 
-    use super::{Op, CPU};
+    use super::{Cpu, Op};
     #[test]
     fn example() {
         let input = fs::read_to_string("input/example08").unwrap();
-        let mut cpu = CPU::new(&input);
+        let mut cpu = Cpu::new(&input);
         let mut ins_done = HashSet::new();
         ins_done.insert(0);
         while cpu.run() {
@@ -72,7 +72,7 @@ mod tests {
     #[test]
     fn part1() {
         let input = fs::read_to_string("input/day08").unwrap();
-        let mut cpu = CPU::new(&input);
+        let mut cpu = Cpu::new(&input);
         let mut ins_done = HashSet::new();
         ins_done.insert(0);
         while cpu.run() {
@@ -88,7 +88,7 @@ mod tests {
     #[test]
     fn part2() {
         let input = fs::read_to_string("input/day08").unwrap();
-        let cpu = CPU::new(&input);
+        let cpu = Cpu::new(&input);
         'outer: for i in 0..cpu.instructions.len() {
             if let Op::Acc(_) = cpu.instructions[i] {
                 continue;
