@@ -51,37 +51,36 @@ fn recursive_combat(mut deck1: VecDeque<usize>, mut deck2: VecDeque<usize>) -> (
         let mut hasher = DefaultHasher::new();
         deck1.hash(&mut hasher);
         deck2.hash(&mut hasher);
-        if !history.insert(hasher.finish()) {
+        if deck2.is_empty() || !history.insert(hasher.finish()) {
             return (Winner::P1, calc_score(&deck1));
         }
         if deck1.is_empty() {
             return (Winner::P2, calc_score(&deck2));
         }
-        if deck2.is_empty() {
-            return (Winner::P1, calc_score(&deck1));
-        }
+
         let card1 = deck1.pop_front().unwrap();
         let card2 = deck2.pop_front().unwrap();
-        if card1 <= deck1.len() && card2 <= deck2.len() {
-            // sub-game!
-            let subdeck1 = deck1.iter().take(card1).cloned().collect();
-            let subdeck2 = deck2.iter().take(card2).cloned().collect();
-            match recursive_combat(subdeck1, subdeck2) {
-                (Winner::P1, _) => {
-                    deck1.push_back(card1);
-                    deck1.push_back(card2);
-                }
-                (Winner::P2, _) => {
-                    deck2.push_back(card2);
-                    deck2.push_back(card1);
-                }
+        let round_winner = {
+            if card1 <= deck1.len() && card2 <= deck2.len() {
+                // sub-game!
+                let subdeck1 = deck1.iter().take(card1).cloned().collect();
+                let subdeck2 = deck2.iter().take(card2).cloned().collect();
+                recursive_combat(subdeck1, subdeck2).0
+            } else if card1 > card2 {
+                Winner::P1
+            } else {
+                Winner::P2
             }
-        } else if card1 > card2 {
-            deck1.push_back(card1);
-            deck1.push_back(card2);
-        } else {
-            deck2.push_back(card2);
-            deck2.push_back(card1);
+        };
+        match round_winner {
+            Winner::P1 => {
+                deck1.push_back(card1);
+                deck1.push_back(card2);
+            }
+            Winner::P2 => {
+                deck2.push_back(card2);
+                deck2.push_back(card1);
+            }
         }
     }
 }
