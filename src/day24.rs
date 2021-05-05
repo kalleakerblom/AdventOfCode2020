@@ -75,7 +75,7 @@ fn get_neighboring_tiles(pos: Pos) -> [Pos; 6] {
     ]
 }
 
-fn flip_tiles_part2(tiles: &mut HashMap<cgmath::Vector2<i32>, Tile>) {
+fn flip_tiles_part2(tiles: &mut HashMap<Pos, Tile>) {
     let to_check: HashSet<Pos> = tiles
         .iter()
         .filter(|&(_, tile)| *tile == Tile::Black)
