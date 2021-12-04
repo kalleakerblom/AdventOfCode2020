@@ -1,7 +1,8 @@
 use itertools::Itertools;
 
 // Adjacency list. If zeroth element is (7,2) then cup 1 is after cup 8 but before cup 3.
-type AdjList = Vec<(usize, usize)>;
+type Adjaceny = (usize, usize);
+type AdjList = Vec<Adjaceny>;
 
 fn link_cups(before: usize, after: usize, cups: &mut AdjList) {
     cups[before].1 = after;
@@ -41,7 +42,7 @@ fn shift_three_cups(current: usize, cups: &mut AdjList) {
     link_cups(back, after_destination, cups);
 }
 
-fn print_cups(cups: &AdjList) -> String {
+fn print_cups(cups: &[Adjaceny]) -> String {
     let mut result = String::new();
     let mut next = cups[0].1;
     while next != 0 {

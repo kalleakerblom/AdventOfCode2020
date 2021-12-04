@@ -36,11 +36,7 @@ fn parse_rules(input: &str) -> Rules {
         .collect()
 }
 
-fn bag_contains_gold(
-    bag: &str,
-    memo: &mut HashSet<String>,
-    rules: &Rules,
-) -> bool {
+fn bag_contains_gold(bag: &str, memo: &mut HashSet<String>, rules: &Rules) -> bool {
     if memo.contains(bag) {
         return true;
     }
@@ -53,11 +49,7 @@ fn bag_contains_gold(
     false
 }
 
-fn bags_inside(
-    bag: &str,
-    memo: &mut HashMap<String, usize>,
-    rules: &Rules,
-) -> usize {
+fn bags_inside(bag: &str, memo: &mut HashMap<String, usize>, rules: &Rules) -> usize {
     if let Some(n) = memo.get(bag) {
         return *n;
     }
@@ -78,9 +70,8 @@ mod tests {
     use super::{bag_contains_gold, bags_inside, parse_bag_info, parse_rules};
     #[test]
     fn example() {
-        let input =
-            "light red bags contain 1 bright white bag, 2 muted yellow bags.";
-        let parsed = parse_bag_info(&input);
+        let input = "light red bags contain 1 bright white bag, 2 muted yellow bags.";
+        let parsed = parse_bag_info(input);
         dbg!(parsed);
     }
     #[test]
@@ -100,7 +91,7 @@ mod tests {
         let input = fs::read_to_string("input/day07").unwrap();
         let rules = parse_rules(&input);
         let mut memo = HashMap::new();
-        let ans = bags_inside(&"shiny gold", &mut memo, &rules);
+        let ans = bags_inside("shiny gold", &mut memo, &rules);
         dbg!(ans);
     }
 }

@@ -38,43 +38,37 @@ fn parse(input: &str) -> (HashMap<usize, Rule>, Vec<String>) {
 
     (rules, msgs)
 }
-fn check_rule<'a>(
-    s: &'a str,
-    r: &Rule,
-    rule_map: &HashMap<usize, Rule>,
-) -> HashSet<&'a str> {
+fn check_rule<'a>(s: &'a str, r: &Rule, rule_map: &HashMap<usize, Rule>) -> HashSet<&'a str> {
     match r {
         Rule::Match(m) => s
             .strip_prefix(m)
             .map(|rem| iter::once(rem).collect())
             .unwrap_or_else(HashSet::new),
-        Rule::Subrule(subrules) => {
-            subrules.iter().fold(iter::once(s).collect(), |acc, sub_id| {
+        Rule::Subrule(subrules) => subrules
+            .iter()
+            .fold(iter::once(s).collect(), |acc, sub_id| {
                 acc.iter()
-                    .map(|s| check_rule(s, &rule_map[&sub_id], rule_map))
+                    .map(|s| check_rule(s, &rule_map[sub_id], rule_map))
                     .reduce(|sets, set| &sets | &set)
                     .unwrap_or_else(HashSet::new)
-            })
-        }
+            }),
         Rule::OrSubRules(subrules1, subrules2) => {
-            let res1: HashSet<_> = subrules1.iter().fold(
-                iter::once(s).collect(),
-                |acc, sub_id| {
+            let res1: HashSet<_> = subrules1
+                .iter()
+                .fold(iter::once(s).collect(), |acc, sub_id| {
                     acc.iter()
-                        .map(|s| check_rule(s, &rule_map[&sub_id], rule_map))
+                        .map(|s| check_rule(s, &rule_map[sub_id], rule_map))
                         .reduce(|sets, set| &sets | &set)
                         .unwrap_or_else(HashSet::new)
-                },
-            );
-            let res2: HashSet<_> = subrules2.iter().fold(
-                iter::once(s).collect(),
-                |acc, sub_id| {
+                });
+            let res2: HashSet<_> = subrules2
+                .iter()
+                .fold(iter::once(s).collect(), |acc, sub_id| {
                     acc.iter()
-                        .map(|s| check_rule(s, &rule_map[&sub_id], rule_map))
+                        .map(|s| check_rule(s, &rule_map[sub_id], rule_map))
                         .reduce(|sets, set| &sets | &set)
                         .unwrap_or_else(HashSet::new)
-                },
-            );
+                });
             &res1 | &res2
         }
     }
